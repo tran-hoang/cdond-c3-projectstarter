@@ -27,7 +27,9 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      # Add parameter here
+      workflow_id:
+        type: string
     steps:
       - run:
           name: Revert migrations
@@ -37,10 +39,11 @@ commands:
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
+              cd ~/project/backend
+              npm install
             #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              npm run build
+              npm run migrations:revert
             fi
             
 jobs:
@@ -291,6 +294,7 @@ jobs:
             # your code here
             apk add --update --no-cache tar
             apk add --update --no-cache gzip
+            apk add ansible
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
             apk add --update --no-cache aws-cli
@@ -319,6 +323,8 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
                     
   #deploy-backend:
