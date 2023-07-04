@@ -328,22 +328,44 @@ jobs:
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
                     
-  #deploy-backend:
-  #  docker:
+  deploy-backend:
+    docker:
       # Docker image here that supports Ansible
-  #  steps:
+      - image: python:3.10-alpine3.16
+    steps:
       # Checkout code from git
+      - checkout
       # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints:
+            - '5d:67:e3:85:c2:b2:46:0f:dd:7f:6a:4b:06:66:8f:d0'
       # attach workspace
-  #    - run:
-  #        name: Install dependencies
-  #        command: |
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
             # your code here
-  #    - run:
-  #        name: Deploy backend
-  #        command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      - run:
+          name: Deploy backend
+          command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
+            cd backend
+
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   #smoke-test:
   #  docker:
@@ -427,8 +449,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      #- deploy-backend:
-      #    requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       #- smoke-test:
       #    requires: [deploy-backend, deploy-frontend]
       #- cloudfront-update:
