@@ -217,9 +217,7 @@ jobs:
           name: Install dependencies
           command: |
             # Your code here
-            pip install --upgrade pip
-            pip install awscli
-            apk add ansible
+            apk add --update --no-cache tar gzip ansible aws-cli
       - restore_cache:
           keys: [ backend-build ]
       - run:
@@ -293,13 +291,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update --no-cache tar
-            apk add --update --no-cache gzip
-            apk add --update --no-cache ansible
-            apk add --update --no-cache nodejs
-            apk add --update --no-cache npm
-            apk add --update --no-cache aws-cli
-            apk add --update --no-cache curl
+            apk add --update --no-cache tar gzip nodejs npm aws-cli
       - run:
           name: Get backend url
           command: |
@@ -346,7 +338,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update --no-cache tar gzip nodejs npm aws-cli ansible curl
+            apk add --update --no-cache tar gzip nodejs npm aws-cli ansible
       - run:
           name: Deploy backend
           command: |
@@ -378,10 +370,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update --no-cache nodejs
-            apk add --update --no-cache npm
-            pip install --upgrade pip
-            pip install awscli
+            apk add --update --no-cache curl aws-cli nodejs npm
       - run:
           name: Backend smoke test.
           command: |
