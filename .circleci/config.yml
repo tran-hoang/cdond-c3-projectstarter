@@ -308,10 +308,10 @@ jobs:
                                     --query 'Reservations[*].Instances[*].PublicIpAddress' \
                                     --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
                                     --output text)
-            echo "${BACKEND_IP}"
+            echo $BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
-            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            echo $API_URL
+            echo "API_URL=$API_URL" >> frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects
@@ -380,8 +380,10 @@ jobs:
             # your code here
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
-            apk add --update --no-cache aws-cli
             apk add --update --no-cache curl
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
       - run:
           name: Backend smoke test.
           command: |
