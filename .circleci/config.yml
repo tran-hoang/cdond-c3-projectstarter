@@ -203,7 +203,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.16
+      - image: python:3.10-alpine3.16
     steps:
       # Checkout code from git
       - checkout
@@ -217,7 +217,7 @@ jobs:
           name: Install dependencies
           command: |
             # Your code here
-            apk add --update --no-cache tar gzip ansible aws-cli
+            apk add --update --no-cache tar gzip ansible aws-cli curl
       - restore_cache:
           keys: [ backend-build ]
       - run:
@@ -291,7 +291,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update --no-cache tar gzip nodejs npm aws-cli
+            apk add --update --no-cache tar gzip nodejs npm aws-cli curl
       - run:
           name: Get backend url
           command: |
@@ -338,7 +338,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update --no-cache tar gzip nodejs npm aws-cli ansible
+            apk add --update --no-cache tar gzip nodejs npm aws-cli ansible curl
       - run:
           name: Deploy backend
           command: |
