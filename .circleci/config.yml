@@ -285,7 +285,7 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: python:3.10-alpine3.16
+      - image: python:3.7-alpine3.16
     steps:
       # Checkout code from git
       - checkout
@@ -298,7 +298,7 @@ jobs:
             apk add --update --no-cache ansible
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
-            apk add --update --no-cache aws-cli
+            pip install awscli
             apk add --update --no-cache curl
       - run:
           name: Get backend url
@@ -370,7 +370,7 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image
-      - image: python:3.10-alpine3.16
+      - image: python:3.7-alpine3.16
     steps:
       # Checkout code from git
       - checkout
@@ -380,8 +380,8 @@ jobs:
             # your code here
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
-            apk add --update --no-cache aws-cli
             apk add --update --no-cache curl
+            pip install awscli
       - run:
           name: Backend smoke test.
           command: |
