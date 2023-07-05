@@ -221,6 +221,7 @@ jobs:
             apk add --update ansible
             apk add --update --no-cache tar
             apk add --update --no-cache gzip
+            apk add --update --no-cache unzip
             apk add --update --no-cache curl
             curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VER}.zip -o awscliv2.zip
             unzip awscliv2.zip
@@ -300,6 +301,7 @@ jobs:
             # your code here
             apk add --update --no-cache tar
             apk add --update --no-cache gzip
+            apk add --update --no-cache unzip
             apk add --update --no-cache ansible
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
@@ -388,6 +390,7 @@ jobs:
             apk add --update --no-cache nodejs
             apk add --update --no-cache npm
             apk add --update --no-cache curl
+            apk add --update --no-cache unzip
             curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VER}.zip -o awscliv2.zip
             unzip awscliv2.zip
             ./aws/install
