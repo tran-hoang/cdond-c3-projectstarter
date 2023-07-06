@@ -24,15 +24,3 @@
     global: yes
     production: yes
     state: latest
-
-- name: "Extract the artifact"
-  become: yes
-  unarchive:
-    src: files/artifact.tar.gz
-    dest: .
-
-- name: "Start app"
-  become: yes
-  shell: |
-    pm2 delete all
-    pm2 start npm -- start
