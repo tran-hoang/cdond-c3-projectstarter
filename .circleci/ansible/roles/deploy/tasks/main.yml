@@ -16,10 +16,10 @@
 
 - name: "Start backend application with PM2"
   shell: |
-    cd ~/backend-app/dist
+    cd ~/backend-app/
     pm2 stop default
-    pm2 start main.js
-    register: execute_node
+    pm2 delete default
+    pm2 start npm -- start
 
 - name: print message
   debug:
