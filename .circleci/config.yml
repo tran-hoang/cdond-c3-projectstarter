@@ -448,7 +448,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            sudo yum install –y nodejs
+            yum install –y nodejs
       - run:
           name: Update cloudfront distribution
           command: |
