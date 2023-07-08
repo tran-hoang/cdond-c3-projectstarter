@@ -484,7 +484,7 @@ jobs:
       # Checkout code from git
       - checkout
       - run:
-          name: Get old stack workflow id and remove old stacks and files
+          name: Fetching OldStack Workflow ID
           command: |
             # your code here
             export OldWorkflowID=<<pipeline.parameters.workflow_id>>
