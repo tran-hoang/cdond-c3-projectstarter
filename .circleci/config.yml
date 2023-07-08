@@ -493,6 +493,7 @@ jobs:
             apk add --update ansible
             apk add --update nodejs
             apk add --update npm
+            apk add --update curl
       - attach_workspace:
           at: ~/
       - run:
