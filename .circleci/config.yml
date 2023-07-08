@@ -476,31 +476,36 @@ jobs:
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-  #cleanup:
-  #  docker:
+  cleanup:
+    docker:
       # Docker image here
-  #    - image: amazon/aws-cli
-  #  steps:
+      - image: amazon/aws-cli
+    steps:
       # Checkout code from git
-  #    - checkout
-  #    - run:
-  #        name: Fetching OldStack Workflow ID
-  #        command: |
+      - checkout
+      - run:
+          name: Fetching OldStack Workflow ID
+          command: |
             # your code here
-  #          export OldWorkflowID=<<pipeline.parameters.workflow_id>>
-  #          export STACKS=$(aws cloudformation list-stacks \
-  #          --query "StackSummaries[*].StackName" \
-  #          --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
-  #          if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-  #          then
+            echo "TODO: I am temporarily comment these command below, will unlock it once the review phase is finished"
+            export OldWorkflowID=$(aws cloudformation \
+            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            --no-paginate --output text)
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+            --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+            echo Stack names: "${STACKS[@]}"
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            then
               # your code here
-  #            echo "----------------------Delete Confirmed-------------------------------------"
-  #            aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-  #            aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-  #            aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-  #          else
-  #            echo "----------------------Cannot Cleanup---------------------------------------"
-  #          fi
+              echo "----------------------Delete Confirmed-------------------------------------"
+              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+            else
+              echo "----------------------Cannot Cleanup---------------------------------------"
+            fi
 
 workflows:
   default:
@@ -532,5 +537,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
          requires: [smoke-test]
-      #- cleanup:
-      #    requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
