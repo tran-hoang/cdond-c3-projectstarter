@@ -465,7 +465,7 @@ jobs:
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
             --stack-name InitialStack \
-            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
             
             echo "OldWorkflow_ID: ${OldWorkflow_ID}"
@@ -487,7 +487,6 @@ jobs:
           name: Fetching OldStack Workflow ID
           command: |
             # your code here
-            echo "TODO: I am temporarily comment these command below, will unlock it once the review phase is finished"
             export OldWorkflowID=$(aws cloudformation \
             list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
             --no-paginate --output text)
