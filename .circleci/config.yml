@@ -44,7 +44,8 @@ commands:
             #SUCCESS=$(curl --insecure https://kvdb.io/RjwtUntH7hgxoNKKa9WZED/migration_${CIRCLE_WORKFLOW_ID:0:7})
             #echo $SUCCESS
             cd ~/project/backend
-            #npm install
+            ls -al
+            npm install
             #  Add revert code here. You can find this in the Getting Started section.
             npm run build
             npm run migrations:revert
