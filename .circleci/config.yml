@@ -33,6 +33,8 @@ commands:
         type: string
         default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
+      - attach_workspace:
+          at: ~/
       - run:
           name: Revert migrations
           # Add when this will run
