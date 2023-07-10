@@ -26,6 +26,9 @@ commands:
                                --stack-name udapeople-frontend-<<parameters.workflow_id>>
 
   revert-migrations:
+    docker:
+      # Docker image here that supports NodeJS
+      - image: circleci/node:13.8.0
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
       # Add parameter here
@@ -276,7 +279,7 @@ jobs:
           name: Run migrations
           command: |
             # Your code here
-            cd backend
+            cd ~/project/backend
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to memstash
