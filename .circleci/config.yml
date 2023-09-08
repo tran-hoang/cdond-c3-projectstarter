@@ -216,7 +216,7 @@ jobs:
       # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints:
-            - "5d:67:e3:85:c2:b2:46:0f:dd:7f:6a:4b:06:66:8f:d0"
+            - "3d:90:c0:bd:fc:b7:eb:09:c9:1c:51:8c:01:36:4a:e4"
       - attach_workspace:
           at: ~/
       - run:
@@ -350,7 +350,7 @@ jobs:
       # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints:
-            - '5d:67:e3:85:c2:b2:46:0f:dd:7f:6a:4b:06:66:8f:d0'
+            - '3d:90:c0:bd:fc:b7:eb:09:c9:1c:51:8c:01:36:4a:e4'
       - attach_workspace:
           at: ~/
       - run:
@@ -481,36 +481,36 @@ jobs:
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-  configure-prometheus:
-    docker:
-      - image: python:3.7-alpine3.16
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - '5d:67:e3:85:c2:b2:46:0f:dd:7f:6a:4b:06:66:8f:d0'
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update aws-cli
-            apk add --update tar
-            apk add --update gzip
-            apk add --update ansible
-            apk add --update nodejs
-            apk add --update npm
-            apk add --update curl
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Setup Prometheus Node Exporter
-          command: |
-            cd .circleci/ansible
-            cat inventory.txt
-            ansible-playbook -i inventory.txt node-exporter.yml
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+  # configure-prometheus:
+  #   docker:
+  #     - image: python:3.7-alpine3.16
+  #   steps:
+  #     - checkout
+  #     - add_ssh_keys:
+  #         fingerprints:
+  #           - '5d:67:e3:85:c2:b2:46:0f:dd:7f:6a:4b:06:66:8f:d0'
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           apk add --update aws-cli
+  #           apk add --update tar
+  #           apk add --update gzip
+  #           apk add --update ansible
+  #           apk add --update nodejs
+  #           apk add --update npm
+  #           apk add --update curl
+  #     - attach_workspace:
+  #         at: ~/
+  #     - run:
+  #         name: Setup Prometheus Node Exporter
+  #         command: |
+  #           cd .circleci/ansible
+  #           cat inventory.txt
+  #           ansible-playbook -i inventory.txt node-exporter.yml
+  #     - destroy-environment:
+  #         workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+  #     - revert-migrations:
+  #         workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cleanup:
     docker:
@@ -561,10 +561,8 @@ workflows:
           filters:
             branches:
               only: [master]
-      - configure-prometheus:
-          requires: [deploy-infrastructure]
       - configure-infrastructure:
-          requires: [configure-prometheus]
+          requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
@@ -576,4 +574,4 @@ workflows:
       - cloudfront-update:
          requires: [smoke-test]
       - cleanup:
-          requires: [cloudfront-update, configure-prometheus]
+          requires: [cloudfront-update]
